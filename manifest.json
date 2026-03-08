@@ -1,0 +1,18 @@
+{
+  "name": "2023级数媒艺术9班课表",
+  "short_name": "课表",
+  "description": "2023级数字媒体艺术9班交互设计3方向课表",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F2F0EB",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "./icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
