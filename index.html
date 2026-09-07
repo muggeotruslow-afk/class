@@ -200,12 +200,16 @@
   }
   .course-card.tentative::before { background: var(--text-muted); }
   .course-card.tentative .course-name { color: var(--text-secondary); }
+  .course-card.tentative .week-range-tag {
+    color: var(--text-secondary); background: var(--border);
+  }
   .course-card:active { transform: scale(0.99); }
 
   .course-top {
     display: flex; align-items: flex-start; justify-content: space-between;
     gap: 8px; margin-bottom: 7px;
   }
+  .course-status { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
   .course-name { font-size: 14px; font-weight: 600; line-height: 1.35; }
   .period-badge {
     font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
@@ -442,9 +446,9 @@ const courses = [
   { name:'三维高精模型制作基础', teacher:'苗文汇', room:'兴艺221(数字动画实训室6)', day:4, periods:[5,8], weeks:wm(w(1,4),w(6,13)) },
 ];
 
-// 表格“其他课程”：没有固定星期、节次和教室，在对应周次的每天显示为待定提醒
+// 表格“其他课程”：能从正式排课继承时间的放回对应节次，其余显示为整周提醒
 const tentativeCourses = [
-  { name:'形势与政策（七）', teacher:'赵风景', weeks:w(2,4) },
+  { name:'形势与政策（七）', teacher:'赵风景', room:'兴B124（阶梯教室6）', day:2, periods:[3,4], weeks:w(2,4) },
   { name:'数字创意产业调研（分方向调研）', teacher:'向瑜', weeks:w(14,15) },
 ];
 
@@ -550,8 +554,14 @@ function getDayCourses(dayIdx, week) {
     .sort((a, b) => a.periods[0] - b.periods[0]);
 }
 
-function getTentativeCourses(week) {
-  return tentativeCourses.filter(c => inWeek(c.weeks, week));
+function getDayTentativeCourses(dayIdx, week) {
+  return tentativeCourses
+    .filter(c => c.day === dayIdx && inWeek(c.weeks, week))
+    .sort((a, b) => a.periods[0] - b.periods[0]);
+}
+
+function getWeekTentativeCourses(week) {
+  return tentativeCourses.filter(c => c.day == null && inWeek(c.weeks, week));
 }
 
 // ─────────────────────────────────────────────
@@ -561,9 +571,11 @@ function renderWeekNav() {
   const actualWeek = getActualWeek();
   document.getElementById('weekNav').innerHTML = DAYS.map((d, i) => {
     const count = getDayCourses(i, currentWeek).length;
-    const tentativeCount = getTentativeCourses(currentWeek).length;
+    const tentativeCount = getDayTentativeCourses(i, currentWeek).length + getWeekTentativeCourses(currentWeek).length;
     const dateNum = getDayDate(currentWeek, i);
-    const countLabel = count ? count+'节' : tentativeCount ? tentativeCount+'项待定' : '无课';
+    const countLabel = count
+      ? count+'节'+(tentativeCount ? '+'+tentativeCount+'待定' : '')
+      : tentativeCount ? tentativeCount+'项待定' : '无课';
     const isToday = i === TODAY_IDX && currentWeek === actualWeek;
     return `<div class="week-nav-btn ${i===currentDayIdx?'active':''} ${isToday?'is-today':''}"
                  onclick="selectDay(${i})">
@@ -576,15 +588,18 @@ function renderWeekNav() {
 
 function renderMain() {
   const isToday = currentDayIdx === TODAY_IDX && currentWeek === getActualWeek();
-  const list = getDayCourses(currentDayIdx, currentWeek);
-  const tentativeList = getTentativeCourses(currentWeek);
+  const list = [
+    ...getDayCourses(currentDayIdx, currentWeek).map(c => ({...c, tentative:false})),
+    ...getDayTentativeCourses(currentDayIdx, currentWeek).map(c => ({...c, tentative:true})),
+  ].sort((a, b) => a.periods[0] - b.periods[0]);
+  const weekTentativeList = getWeekTentativeCourses(currentWeek);
   let html = `<div class="day-header">
     <span class="day-header-title">${DAYS[currentDayIdx]}</span>
     ${isToday ? '<span class="day-today-badge">今天</span>' : ''}
     <span class="day-header-sub">第 ${currentWeek} 周 · ${getDayDate(currentWeek, currentDayIdx)}日</span>
   </div>`;
 
-  if (!list.length && !tentativeList.length) {
+  if (!list.length && !weekTentativeList.length) {
     html += `<div class="empty-state">
       <div class="empty-icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text-muted)">
@@ -600,10 +615,10 @@ function renderMain() {
     return;
   }
 
-  if (tentativeList.length) {
+  if (weekTentativeList.length) {
     html += `<div class="period-group">
       <div class="period-group-label"><span>待定课程</span></div>`;
-    tentativeList.forEach(c => {
+    weekTentativeList.forEach(c => {
       html += `<div class="course-card tentative">
         <div class="course-top">
           <div class="course-name">${c.name}</div>
@@ -631,11 +646,14 @@ function renderMain() {
     html += `<div class="period-group">
       <div class="period-group-label"><span>${z}</span></div>`;
     groups[z].forEach(c => {
-      const cl = COLOR_MAP[c.name] || 'c3';
+      const cl = c.tentative ? 'tentative' : (COLOR_MAP[c.name] || 'c3');
       html += `<div class="course-card ${cl}">
         <div class="course-top">
           <div class="course-name">${c.name}</div>
-          <div class="period-badge">第${c.periods[0]}–${c.periods[1]}节</div>
+          <div class="course-status">
+            <div class="period-badge">第${c.periods[0]}–${c.periods[1]}节</div>
+            ${c.tentative ? '<div class="tentative-badge">可能不上</div>' : ''}
+          </div>
         </div>
         <div class="course-meta">
           <span class="meta-tag">
@@ -728,3 +746,4 @@ renderMain();
 </script>
 </body>
 </html>
+
