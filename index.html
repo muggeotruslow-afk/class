@@ -36,6 +36,10 @@
     --accent: #2D6A4F;
     --accent-light: #D8EDE4;
     --today: #C1392B;
+    --selection-bg: #1A1915;
+    --selection-border: #1A1915;
+    --selection-fg: #FFFFFF;
+    --selection-muted: rgba(255,255,255,0.6);
     --card-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
     --card-shadow-hover: 0 4px 12px rgba(0,0,0,0.1);
     --tabbar-bg: rgba(255,255,255,0.92);
@@ -55,6 +59,10 @@
     --accent: #4ADE80;
     --accent-light: #14291E;
     --today: #E05A4A;
+    --selection-bg: #373734;
+    --selection-border: #4B4B46;
+    --selection-fg: #F0EDE8;
+    --selection-muted: #B9B5AE;
     --card-shadow: 0 1px 3px rgba(0,0,0,0.3);
     --card-shadow-hover: 0 4px 12px rgba(0,0,0,0.4);
     --tabbar-bg: rgba(28,28,26,0.94);
@@ -109,7 +117,7 @@
     display: flex; align-items: center; justify-content: center;
     cursor: pointer; transition: all 0.12s; color: var(--text-secondary);
   }
-  .ctrl-btn:active { transform: scale(0.92); background: var(--text-primary); color: #fff; border-color: var(--text-primary); }
+  .ctrl-btn:active { transform: scale(0.92); background: var(--selection-bg); color: var(--selection-fg); border-color: var(--selection-border); }
 
   .week-selector {
     display: flex; align-items: center; gap: 4px;
@@ -142,11 +150,11 @@
     font-size: 10px; font-weight: 500; color: var(--text-muted);
     line-height: 1;
   }
-  .week-nav-btn.active { background: var(--text-primary); border-color: var(--text-primary); }
+  .week-nav-btn.active { background: var(--selection-bg); border-color: var(--selection-border); }
   .week-nav-btn.active .day-name,
   .week-nav-btn.active .day-date,
-  .week-nav-btn.active .day-count { color: #fff; }
-  .week-nav-btn.active .day-count { color: rgba(255,255,255,0.6); }
+  .week-nav-btn.active .day-count { color: var(--selection-fg); }
+  .week-nav-btn.active .day-count { color: var(--selection-muted); }
 
   .week-nav-btn.is-today:not(.active) { border-color: var(--today); }
   .week-nav-btn.is-today:not(.active) .day-name { color: var(--today); font-weight: 700; }
@@ -282,7 +290,7 @@
     user-select: none;
   }
   .week-option:active { border-color: var(--accent); color: var(--accent); }
-  .week-option.selected { background: var(--text-primary); border-color: var(--text-primary); color: #fff; }
+  .week-option.selected { background: var(--selection-bg); border-color: var(--selection-border); color: var(--selection-fg); }
 
   /* ── BOTTOM TAB BAR ── */
   .tab-bar {
@@ -329,6 +337,7 @@
   @media (min-width: 680px) {
     .tab-bar { max-width: 680px; left: 50%; transform: translateX(-50%); border-radius: 20px 20px 0 0; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
   }
+
 </style>
 </head>
 <body>
