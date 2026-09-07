@@ -195,6 +195,11 @@
   .c4::before { background: #F59E0B; }
   .c5::before { background: #EF4444; }
   .c6::before { background: #EC4899; }
+  .course-card.tentative {
+    background: var(--surface2); border-style: dashed; box-shadow: none;
+  }
+  .course-card.tentative::before { background: var(--text-muted); }
+  .course-card.tentative .course-name { color: var(--text-secondary); }
   .course-card:active { transform: scale(0.99); }
 
   .course-top {
@@ -224,6 +229,11 @@
     background: var(--accent-light); border-radius: 6px;
     padding: 2px 7px; font-family: 'DM Mono', monospace;
     transition: background 0.2s, color 0.2s;
+  }
+  .tentative-badge {
+    font-size: 11px; font-weight: 600; color: var(--text-secondary);
+    background: var(--border); border-radius: 6px; padding: 2px 7px;
+    flex-shrink: 0; white-space: nowrap;
   }
 
   /* ── EMPTY STATE ── */
@@ -332,7 +342,7 @@
 <div class="header">
   <div class="header-top">
     <div>
-      <div class="header-title">2025-2026学年 · 第2学期</div>
+      <div class="header-title">2026-2027学年 · 第1学期</div>
       <div class="header-subtitle">数媒艺术9班 · 交互设计3</div>
     </div>
     <div class="header-actions">
@@ -407,59 +417,35 @@ function wm(...segs) { return [].concat(...segs); }
 // 课程颜色映射
 // ─────────────────────────────────────────────
 const COLOR_MAP = {
-  '移动媒体游戏设计':                       'c1',
-  '虚幻引擎应用':                           'c2',
-  '数字媒体设计综合训练':                   'c3',
-  '交互作品综合设计':                       'c4',
-  '习近平新时代中国特色社会主义思想概论':   'c5',
-  '形势与政策（六）':                       'c5',
-  '世界现代设计史':                         'c6',
-  '人工智能生成艺术应用实践':               'c2',
-  'Final Cut剪辑':                          'c1',
+  '数字媒体作品综合创作': 'c1',
+  '形势与政策（七）':     'c5',
+  '文献检索与论文写作':   'c2',
+  '文创产品开发':         'c4',
+  '三维高精模型制作基础': 'c3',
 };
 
 // ─────────────────────────────────────────────
 // 课程数据
 // ─────────────────────────────────────────────
 const courses = [
-  // ══ 周一 ══
-  { name:'移动媒体游戏设计', teacher:'郝梦', room:'兴艺429(数字动画实训室13)', day:0, periods:[1,4], weeks:wm(w(1,4),[7]) },
-  { name:'虚幻引擎应用', teacher:'洪天阔', room:'兴艺429(数字动画实训室13)', day:0, periods:[1,4], weeks:w(8,14) },
-  { name:'数字媒体设计综合训练', teacher:'李淑琦', room:'兴艺222(数字动画实训室7)', day:0, periods:[1,4], weeks:[15] },
-  { name:'数字媒体设计综合训练', teacher:'李淑琦', room:'校内实践6', day:0, periods:[1,4], weeks:[16] },
-  { name:'交互作品综合设计', teacher:'赵明浩', room:'兴艺220(数字动画实训室5)', day:0, periods:[5,8], weeks:w(8,14) },
-  { name:'数字媒体设计综合训练', teacher:'李淑琦', room:'兴艺430(数字动画实训室14)', day:0, periods:[5,8], weeks:[15] },
-  { name:'数字媒体设计综合训练', teacher:'李淑琦', room:'校内实践10', day:0, periods:[5,8], weeks:[16] },
-  { name:'数字媒体设计综合训练', teacher:'李淑琦', room:'兴艺222(数字动画实训室7)', day:0, periods:[9,12], weeks:[15] },
-  { name:'数字媒体设计综合训练', teacher:'李淑琦', room:'校内实践11', day:0, periods:[9,12], weeks:[16] },
-
   // ══ 周二 ══
-  { name:'形势与政策（六）', teacher:'胡凤阳', room:'兴B129（阶梯教室3）', day:1, periods:[1,2], weeks:w(5,8) },
-  { name:'习近平新时代中国特色社会主义思想概论', teacher:'李屈', room:'兴B423（阶梯教室19）', day:1, periods:[5,7], weeks:w(1,16) },
+  { name:'文献检索与论文写作', teacher:'白云鹏', room:'兴C407（阶梯教室71）', day:1, periods:[5,6], weeks:wm(w(1,4),w(6,9)) },
 
   // ══ 周三 ══
-  { name:'世界现代设计史', teacher:'张骏', room:'兴B131（阶梯教室5）', day:2, periods:[3,4], weeks:w(1,16) },
-  { name:'移动媒体游戏设计', teacher:'郝梦', room:'兴艺429(数字动画实训室13)', day:2, periods:[5,8], weeks:wm(w(1,4),[7]) },
-  { name:'虚幻引擎应用', teacher:'洪天阔', room:'兴艺429(数字动画实训室13)', day:2, periods:[5,8], weeks:w(8,14) },
+  { name:'形势与政策（七）', teacher:'赵风景', room:'兴B124（阶梯教室6）', day:2, periods:[3,4], weeks:[1] },
+  { name:'文创产品开发', teacher:'翟雅静', room:'兴B519(多媒体教室)', day:2, periods:[5,8], weeks:w(10,17) },
 
   // ══ 周四 ══
-  { name:'数字媒体设计综合训练', teacher:'李淑琦', room:'兴艺222(数字动画实训室7)', day:3, periods:[1,4], weeks:[15] },
-  { name:'数字媒体设计综合训练', teacher:'李淑琦', room:'校内实践6', day:3, periods:[1,8], weeks:[16] },
-  { name:'交互作品综合设计', teacher:'赵明浩', room:'兴艺317(数字动画实训室9)', day:3, periods:[5,8], weeks:w(8,14) },
-  { name:'数字媒体设计综合训练', teacher:'李淑琦', room:'兴艺430(数字动画实训室14)', day:3, periods:[5,11], weeks:[15] },
-  { name:'数字媒体设计综合训练', teacher:'李淑琦', room:'校内实践10', day:3, periods:[9,11], weeks:[16] },
+  { name:'数字媒体作品综合创作', teacher:'张兴', room:'兴B315(多媒体教室)', day:3, periods:[1,6], weeks:wm(w(1,4),w(6,11)) },
 
   // ══ 周五 ══
-  { name:'数字媒体设计综合训练', teacher:'李淑琦', room:'兴艺225(数字视频调色实验室)', day:4, periods:[1,2], weeks:[15] },
-  { name:'数字媒体设计综合训练', teacher:'李淑琦', room:'校内实践6', day:4, periods:[1,2], weeks:[16] },
-  { name:'人工智能生成艺术应用实践', teacher:'焦俊皓', room:'兴艺323(数字动画实训室10)', day:4, periods:[5,8], weeks:w(9,16) },
-  { name:'Final Cut剪辑', teacher:'冬清', room:'兴艺225(数字视频调色实验室)', day:4, periods:[9,12], weeks:w(9,16) },
+  { name:'三维高精模型制作基础', teacher:'苗文汇', room:'兴艺221(数字动画实训室6)', day:4, periods:[5,8], weeks:wm(w(1,4),w(6,13)) },
+];
 
-  // ══ 周六 ══
-  { name:'移动媒体游戏设计', teacher:'郝梦', room:'兴艺201(数字动画实训室1)', day:5, periods:[9,12], weeks:w(9,10) },
-
-  // ══ 周日 ══
-  { name:'移动媒体游戏设计', teacher:'郝梦', room:'兴艺201(数字动画实训室1)', day:6, periods:[1,4], weeks:w(9,10) },
+// 表格“其他课程”：没有固定星期、节次和教室，在对应周次的每天显示为待定提醒
+const tentativeCourses = [
+  { name:'形势与政策（七）', teacher:'赵风景', weeks:w(2,4) },
+  { name:'数字创意产业调研（分方向调研）', teacher:'向瑜', weeks:w(14,15) },
 ];
 
 // ─────────────────────────────────────────────
@@ -470,8 +456,9 @@ const DAYS = ['周一','周二','周三','周四','周五','周六','周日'];
 const TODAY_JS  = new Date().getDay();
 const TODAY_IDX = TODAY_JS === 0 ? 6 : TODAY_JS - 1;
 
-// 学期第1周周一 = 2026-03-09
-const SEM_START = new Date('2026-03-09');
+// 学期第1周周一 = 2026-08-31，共19周
+const SEM_START  = new Date(2026, 7, 31);
+const TOTAL_WEEKS = 19;
 
 let currentWeek   = 1;
 let currentDayIdx = TODAY_IDX;
@@ -479,8 +466,16 @@ let currentDayIdx = TODAY_IDX;
 // 推算当前周
 (function initWeek() {
   const diff = Math.floor((new Date() - SEM_START) / 86400000);
-  if (diff >= 0) currentWeek = Math.min(16, Math.max(1, Math.floor(diff / 7) + 1));
+  if (diff >= 0) currentWeek = Math.min(TOTAL_WEEKS, Math.max(1, Math.floor(diff / 7) + 1));
 })();
+
+// 仅在学期范围内返回今天所在的实际周次
+function getActualWeek() {
+  const diff = Math.floor((new Date() - SEM_START) / 86400000);
+  if (diff < 0) return null;
+  const week = Math.floor(diff / 7) + 1;
+  return week <= TOTAL_WEEKS ? week : null;
+}
 
 // 根据周次和星期索引（0=周一）计算几号
 function getDayDate(weekNum, dayIdx) {
@@ -555,32 +550,41 @@ function getDayCourses(dayIdx, week) {
     .sort((a, b) => a.periods[0] - b.periods[0]);
 }
 
+function getTentativeCourses(week) {
+  return tentativeCourses.filter(c => inWeek(c.weeks, week));
+}
+
 // ─────────────────────────────────────────────
 // 渲染
 // ─────────────────────────────────────────────
 function renderWeekNav() {
+  const actualWeek = getActualWeek();
   document.getElementById('weekNav').innerHTML = DAYS.map((d, i) => {
     const count = getDayCourses(i, currentWeek).length;
+    const tentativeCount = getTentativeCourses(currentWeek).length;
     const dateNum = getDayDate(currentWeek, i);
-    return `<div class="week-nav-btn ${i===currentDayIdx?'active':''} ${i===TODAY_IDX?'is-today':''}"
+    const countLabel = count ? count+'节' : tentativeCount ? tentativeCount+'项待定' : '无课';
+    const isToday = i === TODAY_IDX && currentWeek === actualWeek;
+    return `<div class="week-nav-btn ${i===currentDayIdx?'active':''} ${isToday?'is-today':''}"
                  onclick="selectDay(${i})">
       <span class="day-name">${d}</span>
       <span class="day-date">${dateNum}</span>
-      <span class="day-count">${count ? count+'节' : '无课'}</span>
+      <span class="day-count">${countLabel}</span>
     </div>`;
   }).join('');
 }
 
 function renderMain() {
-  const isToday = currentDayIdx === TODAY_IDX;
+  const isToday = currentDayIdx === TODAY_IDX && currentWeek === getActualWeek();
   const list = getDayCourses(currentDayIdx, currentWeek);
+  const tentativeList = getTentativeCourses(currentWeek);
   let html = `<div class="day-header">
     <span class="day-header-title">${DAYS[currentDayIdx]}</span>
     ${isToday ? '<span class="day-today-badge">今天</span>' : ''}
     <span class="day-header-sub">第 ${currentWeek} 周 · ${getDayDate(currentWeek, currentDayIdx)}日</span>
   </div>`;
 
-  if (!list.length) {
+  if (!list.length && !tentativeList.length) {
     html += `<div class="empty-state">
       <div class="empty-icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text-muted)">
@@ -594,6 +598,29 @@ function renderMain() {
     </div>`;
     document.getElementById('mainContent').innerHTML = html;
     return;
+  }
+
+  if (tentativeList.length) {
+    html += `<div class="period-group">
+      <div class="period-group-label"><span>待定课程</span></div>`;
+    tentativeList.forEach(c => {
+      html += `<div class="course-card tentative">
+        <div class="course-top">
+          <div class="course-name">${c.name}</div>
+          <div class="tentative-badge">可能不上</div>
+        </div>
+        <div class="course-meta">
+          <span class="meta-tag">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+            </svg>${c.teacher}
+          </span>
+          <span class="meta-tag">时间及地点待定</span>
+          <span class="week-range-tag">${weeksLabel(c.weeks)}</span>
+        </div>
+      </div>`;
+    });
+    html += '</div>';
   }
 
   const groups = { '上午':[], '下午':[], '晚上':[] };
@@ -637,7 +664,7 @@ function renderMain() {
 // ─────────────────────────────────────────────
 function renderWeekPicker() {
   document.getElementById('weekGrid').innerHTML =
-    Array.from({length:16}, (_,i) => i+1).map(wk =>
+    Array.from({length:TOTAL_WEEKS}, (_,i) => i+1).map(wk =>
       `<div class="week-option ${wk===currentWeek?'selected':''}" onclick="pickWeek(${wk})">第${wk}周</div>`
     ).join('');
 }
@@ -650,7 +677,7 @@ function pickWeek(wk) {
   renderWeekNav(); renderMain();
 }
 function changeWeek(d) {
-  currentWeek = Math.max(1, Math.min(16, currentWeek + d));
+  currentWeek = Math.max(1, Math.min(TOTAL_WEEKS, currentWeek + d));
   document.getElementById('weekLabel').textContent = `第${currentWeek}周`;
   renderWeekNav(); renderMain();
 }
@@ -658,7 +685,7 @@ function selectDay(idx) { currentDayIdx = idx; renderWeekNav(); renderMain(); }
 function goToday() {
   // 推算今天是第几周
   const diff = Math.floor((new Date() - SEM_START) / 86400000);
-  if (diff >= 0) currentWeek = Math.min(16, Math.max(1, Math.floor(diff / 7) + 1));
+  if (diff >= 0) currentWeek = Math.min(TOTAL_WEEKS, Math.max(1, Math.floor(diff / 7) + 1));
   currentDayIdx = TODAY_IDX;
   document.getElementById('weekLabel').textContent = `第${currentWeek}周`;
   renderWeekNav(); renderMain();
